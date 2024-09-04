@@ -165,7 +165,7 @@
     .getElementById("logout-link")
     .addEventListener("click", function (event) {
       event.preventDefault();
-      if (confirm("Voulez vous vraiment vous deconnecter?")) {
+      if (confirm("Do you really want to logout?")) {
         window.location.href = this.href;
         window.api.logout(); // Call the exposed logout function
       }

@@ -120,7 +120,7 @@ def create_category(req):
         form = CategoryForm(req.POST)
         if form.is_valid():
             form.save()
-        messages.success = 'New category added'
+        messages.success(req,'New category added')
         return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
     else:
         return render(req, 'form.html', context={'form': form, 'form_title': 'Add a new category'})
@@ -221,7 +221,7 @@ def create_product(req):
         form = ProductForm(req.POST)
         if form.is_valid():
             form.save()
-        messages.success = 'New product added'
+        messages.success(req,'New product added')
         return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
     else:
         return render(req, 'base/products/form.html', context={'form': form, 'form_title': 'Add a new product'})
@@ -574,7 +574,7 @@ def create_client(req):
         form = ClientForm(req.POST)
         if form.is_valid():
             form.save()
-        messages.success = 'New client added'
+        messages.success(req,'New client added')
         return HttpResponse(status=204, headers={'HX-Trigger': 'db_changed'})
     else:
         return render(req, 'form.html', context={'form': form, 'form_title': 'New client'})

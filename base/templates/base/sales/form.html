@@ -30,6 +30,7 @@
     <div>
       <h3 class="text-xs text-gray-400 mb-1">Product</h3>
       <select
+        required
         name="prod_id"
         id="prod_select"
         class="mb-3 w-full flex px-3 py-2 rounded-lg border focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-sky-500 cursor-pointer"
@@ -43,6 +44,7 @@
     <div>
       <h3 class="text-xs text-gray-400 mb-1">Quantity</h3>
       <input
+        required
         name="prod_qt"
         type="number"
         class="mb-3 px-4 py-2 rounded-lg border focus:border-none focus:outline-none focus:ring-1 focus:ring-sky-300 w-full"
@@ -68,7 +70,7 @@
 </form>
 
 <script>
-  document.addEventListener('htmx:load', function() {
+  document.addEventListener("htmx:load", function () {
     updateProducts(); // Ensure the function is available when HTMX loads the content
   });
 
@@ -80,17 +82,17 @@
     if (!catId) return; // Ensure a category is selected before making the fetch request
 
     fetch(`{% url 'load_prod_by_cat' %}?category=${catId}`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         prodSelect.innerHTML =
           '<option value="" selected="true" disabled="disabled">Product</option>';
-        data.forEach(product => {
+        data.forEach((product) => {
           const option = document.createElement("option");
           option.value = product.id;
           option.textContent = product.name;
           prodSelect.appendChild(option);
         });
       })
-      .catch(error => console.error("Error fetching products:", error));
+      .catch((error) => console.error("Error fetching products:", error));
   }
 </script>
