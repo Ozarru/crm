@@ -1,0 +1,76 @@
+{% if not sales %}
+<div
+  class="h-full flex flex-col items-center justify-center gap-2 my-20 mx-auto"
+>
+  <i class="fa-solid fa-tags text-indigo-700 text-9xl"></i>
+  <span>No sales found</span>
+</div>
+{% else %}
+<div class="py-3 bg-white border-2 rounded-2xl">
+  <table class="w-full text-left db-table">
+    <thead class="bg-white text-indigo-700 rounded-xl">
+      <tr>
+        <th class="px-3 py-4 text-sm">ID</th>
+        <th class="px-3 py-4 text-sm">Date</th>
+        <th class="px-3 py-4 text-sm">Time</th>
+        <th class="px-3 py-4 text-sm">Client</th>
+        <th class="px-3 py-4 text-sm">User</th>
+        <th class="px-3 py-4 text-sm">Total</th>
+        <th class="px-3 py-4 text-sm text-center">Action</th>
+      </tr>
+    </thead>
+
+    <tbody class="border">
+      {% for obj in sales %}
+      <tr
+        class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-50"
+      >
+        <td class="px-3 py-1">id-{{obj.id}}</td>
+        <td class="px-3 py-1">{{obj.timestamp.date}}</td>
+        <td class="px-3 py-1">{{obj.timestamp.time}}</td>
+        <td class="px-3 py-1">{{obj.client.full_name}}</td>
+        <td class="px-3 py-1">{{obj.user.full_name}}</td>
+        <td class="px-3 py-1">{{obj.total}} €</td>
+        <td class="px-3 py-1 relative">
+          <div class="w-fit text-gray-700 mx-auto">
+            <button
+              type="button"
+              class="hover:bg-white hover:text-indigo-700 px-3 py-1 rounded-full"
+              name="sentry"
+              onclick="toggleMenu(this,'sle_{{obj.id}}')"
+            >
+              <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+            </button>
+
+            <div
+              class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs overflow-hidden"
+              id="sle_{{obj.id}}"
+            >
+              <!--  -->
+              <a
+                hx-boost="false"
+                href="{% url 'sale_details' obj.id %}"
+                class="px-4 py-2 flex items-center hover:text-black hover:bg-indigo-200 rounded-md w-full text-center cursor-pointer"
+                ><i class="text-sm fa-solid fa-expand mr-2"></i>
+                Details
+              </a>
+
+              {% if user.is_superuser %}
+              <button
+                hx-confirm="Dou you really want to delete this?"
+                hx-delete="{% url 'delete_base_object' obj.id 'Sale' %}"
+                class="px-4 py-2 flex items-center hover:text-black hover:bg-red-200 rounded-md w-full text-center cursor-pointer"
+              >
+                <i class="text-sm fa-solid fa-trash mr-2"></i>
+                Supprimer
+              </button>
+              {% endif %}
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}

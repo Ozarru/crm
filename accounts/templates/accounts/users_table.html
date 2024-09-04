@@ -1,0 +1,77 @@
+<!--  -->
+{% if not users %}
+<div class="flex flex-col justify-center items-center gap-2 my-40 mx-auto">
+  <i class="fa-solid fa-users text-indigo-700 text-9xl"></i>
+  <span>No user found</span>
+</div>
+{% else %}
+<div class="py-3 bg-white border-2 rounded-2xl">
+  <table class="w-full text-left db-table">
+    <thead class="bg-white text-indigo-700 rounded-xl">
+      <tr>
+        <th class="px-3 py-4 text-sm">ID</th>
+        <th class="px-3 py-4 text-sm">Firstname</th>
+        <th class="px-3 py-4 text-sm">Lastname</th>
+        <th class="px-3 py-4 text-sm">Email</th>
+        <th class="px-3 py-4 text-sm">Phone</th>
+        <th class="px-3 py-4 text-sm">Sex</th>
+        <th class="px-3 py-4 text-sm text-center">Sales number</th>
+        <th class="px-3 py-4 text-sm text-center">Sales value</th>
+        <th class="px-3 py-4 text-sm text-center">Action</th>
+      </tr>
+    </thead>
+
+    <tbody class="border">
+      {% for obj in users %}
+      <tr
+        class="text-gray-600 border text-sm hover:bg-white hover:text-black transition-all duration-50"
+      >
+        <td class="px-3 py-1">{{obj.id}}</td>
+        <td class="px-3 py-1">{{obj.first_name}}</td>
+        <td class="px-3 py-1">{{obj.last_name}}</td>
+        <td class="px-3 py-1">{{obj.email}}</td>
+        <td class="px-3 py-1">{{obj.phone}}</td>
+        <td class="px-3 py-1">{{obj.sex|title}}</td>
+        <td class="px-3 py-1 text-center">{{obj.sale_count}}</td>
+        <td class="px-3 py-1 text-center">{{obj.sale_aggregate|floatformat:2 }} €</td>
+        <td class="px-3 py-1 relative text-center">
+          <div class="w-fit text-gray-700 mx-auto">
+            <button
+              type="button"
+              class="hover:bg-white hover:text-indigo-500 px-3 py-1 rounded-full"
+              name="sentry"
+              onclick="toggleMenu(this,'menu_{{obj.id}}')"
+            >
+              <i class="fa-sharp fa-solid fa-ellipsis-vertical"></i>
+            </button>
+
+            <div
+              class="hidden bg-gray-50 w-40 shadow-md lg:w-[180px] p-2 absolute right-0 top-12 origin-top-left bg-white z-10 rounded-xl flex flex-col items-center gap-2 text-xs overflow-hidden"
+              id="menu_{{obj.id}}"
+            >
+              <!--  -->
+              <a
+                hx-boost="false"
+                href="{% url 'user_details' obj.id %}"
+                class="px-4 py-2 flex items-center hover:text-black hover:bg-indigo-200 rounded-md w-full text-center cursor-pointer"
+                ><i class="text-sm fa-solid fa-expand mr-2"></i>
+                Details
+              </a>
+
+              <button
+                hx-target="#basic_dialog"
+                hx-get="{% url 'edit_user' obj.id %}"
+                class="px-4 py-2 flex items-center hover:text-black hover:bg-sky-200 rounded-md w-full text-center cursor-pointer"
+              >
+                <i class="text-sm fa-solid fa-pen-to-square mr-2"></i>
+                Edit
+              </button>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</div>

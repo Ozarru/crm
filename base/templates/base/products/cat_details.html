@@ -1,0 +1,49 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col justify-between gap-4">
+  <div class="flex justify-between items-center gap-4">
+    <a
+      id="back-button"
+      class="px-3 py-2 text-white text-xs bg-sky-500 hover:bg-indigo-700 rounded-lg transition ease-in duration-200"
+      href="#"
+      >&larr;
+    </a>
+  </div>
+  <!--  -->
+    <div
+      class="p-4 w-full h-100 bg-indigo-900 text-white rounded-lg flex flex-col lg:flex-row justify-between gap-4"
+    >
+    <p>
+      <i class="fa-solid fa-tags text-sky-200 mr-3"></i>Products :
+      <span class="font-bold"> {{products|length}} </span>
+    </p>
+    <div class="border-l border-white"></div>
+    <p>
+      <i class="fa-solid fa-circle-dollar-to-slot text-sky-200 mr-3"></i>Total
+      Value :
+      <span class="font-bold"> {{total_price}} € </span>
+    </p>
+    <div class="border-l border-white"></div>
+    <p>
+      <i class="fa-solid fa-circle-dollar-to-slot text-sky-200 mr-3"></i>Average
+      Price :
+      <span class="font-bold"> {{average_price}} € </span>
+    </p>
+    </div>
+
+  <section class="mb-20 flex flex-col gap-2">
+    <h3 class="font-bold text-lg text-black">Products</h3>
+    <div
+      class="category_products h-full w-full"
+      hx-get="{% url 'category_products' curr_obj.id %}"
+      hx-trigger="load, db_changed from:body"
+      hx-target="this"
+    >
+      <p
+        class="h-full w-full flex justify-center items-center text-sky-500 p-4"
+      >
+        <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+      </p>
+    </div>
+  </section>
+</div>
+{% endblock %}

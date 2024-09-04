@@ -1,0 +1,63 @@
+{% load static %}
+
+<div class="mx-auto w-full rounded-xl">
+  <form
+    class="w-full flex flex-col gap-2 text-sm"
+    hx-post="{{ request.path }}"
+    action=""
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %}
+    <h2
+      class="px-4 py-2 bg-indigo-200 rounded-lg mb-4 text-center text-sm text-black"
+    >
+      {{ form_title }}
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-1 gap-x-2">
+      {% for field in form %}
+      <!-- If the field name is 'description', apply the 'hidden' class to hide it -->
+      <div class="{% if field.name == 'description' or field.name == 'observation' %}hidden{% endif %}">
+        <h3 class="mb-1">{{field.label}}</h3>
+        {{field}}
+      </div>
+      {% endfor %}
+    </div>
+    <div>
+      <h3 class="mb-1">{{form.description.label}}</h3>
+      {{form.description}}
+    </div>
+    <div>
+      <h3 class="mb-1">{{form.observation.label}}</h3>
+      {{form.observation}}
+    </div>
+
+    <div class="flex flex-row-reverse gap-2 items-end text-xs">
+      <button
+        class="px-4 py-2 bg-indigo-700 text-white hover:bg-indigo-900 rounded-lg"
+        type="submit"
+      >
+        Save
+      </button>
+      <button
+        onclick="close_modal()"
+        type="button"
+        class="modal_closer px-4 py-2 bg-gray-100 text-black hover:bg-red-300 rounded-lg"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>
+
+{% if not curr_obj %}
+<script>
+  $(document).ready(function () {
+    // Add a placeholder option to the select element
+    $(".input_selector").children().first().remove();
+    $(".input_selector").prepend(
+      '<option value="" disabled selected></option>'
+    );
+  });
+</script>
+{% endif %}

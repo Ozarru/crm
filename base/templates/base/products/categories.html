@@ -1,0 +1,62 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col gap-4">
+  <div class="flex justify-between items-center gap-2 text-sm">
+    <div class="flex items-center gap-2">
+      <a
+        id="back-button"
+        class="px-3 py-2 text-white text-xs bg-sky-500 hover:bg-indigo-700 rounded-lg transition ease-in duration-200"
+        href="#"
+        >&larr;
+      </a>
+      <h2 class="font-bold text-xl">Categories</h2>
+    </div>
+    <div class="w-full flex justify-end items-center gap-2">
+      <form
+      id="filter"
+        class="hidden lg:flex justify-between items-center gap-1 w-full max-w-[400px] rounded-xl bg-white border hover:border-indigo-500 p-1 text-sm"
+      >
+        <input
+          hx-post="{% url 'filter_categories' %}"
+          hx-target=".categories_table"
+          hx-trigger="keyup changed delay:500ms"
+          name="name"
+          type="text"
+          class="w-full p-2 border rounded-lg outline-none"
+          placeholder="Search by name..."
+        />
+
+        <button
+          type="submit"
+          class="px-3 py-2 rounded-lg text-sm text-black bg-yellow-200 hover:bg-yellow-400 transition ease-in duration-200"
+          hx-on:click="clearForm('filter')"
+          type="submit"
+        >
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </form>
+      <button
+        onclick="hide_dialogs()"
+        hx-target="#basic_dialog"
+        hx-get="{% url 'create_category' %}"
+        class="px-4 py-2 flex items-center text-sm text-white bg-indigo-700 hover:bg-indigo-900 rounded-lg transition ease-in duration-200"
+      >
+        <i class="text-sm fa-solid fa-plus"></i>
+      </button>
+    </div>
+  </div>
+
+  <!--  -->
+  <div
+    class="categories_table"
+    hx-get="{% url 'categories_table' %}"
+    hx-trigger="load, db_changed from:body"
+    hx-target="this"
+  >
+    <p
+      class="h-[400px] w-full flex justify-center items-center text-sky-500 p-4"
+    >
+      <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+    </p>
+  </div>
+</div>
+{% endblock %}

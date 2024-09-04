@@ -1,0 +1,80 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col gap-4">
+  <div class="flex justify-between items-center gap-2 text-sm">
+    <div class="flex justify-between items-center gap-2">
+      <a
+        id="back-button"
+        class="px-3 py-2 text-white bg-sky-500 hover:bg-sky-700 rounded-lg transition ease-in duration-200"
+        href="#"
+        >&larr;
+      </a>
+    </div>
+    <form
+      id="filter"
+      action=""
+      class="hidden lg:flex justify-between items-center gap-1 w-full max-w-[600px] rounded-xl bg-white border hover:border-indigo-500 p-1 text-sm"
+    >
+      <select
+        hx-post="{% url 'filter_users' %}"
+        hx-target=".users_table"
+        hx-trigger="change"
+        name="sex"
+        class="w-full flex px-3 py-2 rounded-lg border focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-sky-500 cursor-pointer"
+      >
+        <option value="" selected="true" disabled="disabled">Sex</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      <input
+        hx-post="{% url 'filter_users' %}"
+        hx-target=".users_table"
+        hx-trigger="keyup changed delay:500ms"
+        name="first_name"
+        type="text"
+        class="w-full p-2 border rounded-lg outline-none"
+        placeholder="First name..."
+      />
+      <input
+        hx-post="{% url 'filter_users' %}"
+        hx-target=".users_table"
+        hx-trigger="keyup changed delay:500ms"
+        name="last_name"
+        type="text"
+        class="w-full p-2 border rounded-lg outline-none"
+        placeholder="Last name..."
+      />
+      <input
+        hx-post="{% url 'filter_users' %}"
+        hx-target=".users_table"
+        hx-trigger="keyup changed delay:500ms"
+        name="phone"
+        type="text"
+        class="w-full p-2 border rounded-lg outline-none"
+        placeholder="Phone..."
+      />
+      <button
+        type="submit"
+        class="px-3 py-2 rounded-lg text-sm text-black bg-yellow-200 hover:bg-yellow-400 transition ease-in duration-200"
+        hx-on:click="clearForm('filter')"
+        type="submit"
+      >
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+    </form>
+  </div>
+
+  <div
+    class="users_table"
+    hx-get="{% url 'users_table' %}"
+    hx-trigger="load, db_changed from:body"
+    hx-target="this"
+  >
+    <p
+      class="h-[400px] w-full flex justify-center items-center text-sky-500 p-4"
+    >
+      <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

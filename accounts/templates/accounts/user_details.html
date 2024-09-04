@@ -1,0 +1,111 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col gap-4">
+  <div class="flex justify-between items-center gap-4">
+    <a
+        class="px-3 py-2 text-white text-xs bg-sky-500 hover:bg-indigo-700 rounded-lg transition ease-in duration-200"
+      href="{% url 'users' %}"
+      >&larr;
+    </a>
+  </div>
+  <!--  -->
+  <div
+    class="p-3 w-full h-full border border-indigo-900 rounded-xl shadow-lg flex flex-col lg:flex-row items-center gap-4"
+  >
+    {% if not curr_obj.image %}
+    <img
+      class="h-40 w-40 bg-white rounded-full object-cover"
+      src="{% static 'imgs/anon.png' %}"
+      alt="image"
+    />
+    {% else %}
+    <img
+      class="h-40 w-40 bg-white rounded-full object-cover"
+      src="{{curr_obj.image.url}}"
+      alt="image"
+    />
+    {% endif %}
+    <article class="text-gray-700 grid gap-1 w-full">
+      <div class="flex justify-between items-center">
+        <h4 class="text-black text-2xl font-bold">{{curr_obj.full_name}}</h4>
+          <button
+            hx-target="#basic_dialog"
+            hx-get="{% url 'edit_user' curr_obj.id %}"
+            class="bg-indigo-700 hover:bg-indigo-900 rounded-lg py-2 px-4 text-white flex items-center gap-2"
+          >
+            <i class="fa-solid fa-pen text-xs"></i>
+          </button>
+      </div>
+      <span class="text-indigo-700">@{{curr_obj.username}}</span>
+      <p>
+        <i class="fa-solid fa-venus-mars mr-3"></i> Sex :
+        <span class="text-black">
+          {{curr_obj.sex|title}}
+        </span>
+      </p>
+      <p>
+        <i class="fa-solid fa-phone mr-3"></i> Phone :
+        <span class="text-black"> {{curr_obj.phone}} </span>
+      </p>
+    </article>
+    <!--  -->
+    <div
+      class="w-full h-100 bg-indigo-900 text-white p-4 rounded-lg flex flex-col gap-2"
+    >
+      <p>
+        <i class="fa-solid fa-tags text-sky-200 mr-3"></i>Sales
+        made :
+        <span class="font-bold">
+          {{sales|length}}
+        </span>
+      </p>
+      <p>
+        <i
+          class="fa-solid fa-circle-dollar-to-slot text-sky-200 mr-3"
+        ></i
+        >Sales value :
+        <span class="font-bold">
+          {{sales_aggregate|floatformat:2}} €
+        </span>
+      </p>
+      <p>
+        <i
+          class="fa-solid fa-users-rays text-sky-200 mr-3"
+        ></i
+        >Loyal clients :
+        <span class="font-bold">
+          {{loyal_clients_count}}
+        </span>
+      </p>
+
+      <!--------------------------------------- menu tabs buttons --------------------------------------->
+
+      <!-- <div
+        class="flex justify-between gap-2 text-xs text-black tabbar h-fit w-full max-w-80 lg:max-w-[600px]"
+      >
+        <button
+          class="tabBtn px-4 py-2 bg-white hover:bg-indigo-700 hover:text-white rounded-lg w-full"
+          onclick="openTab(event, 'stats')"
+          id="defaultTab"
+        >
+          <i class="fa-solid fa-chart-bar"></i>
+          <span class="ml-2">Stats</span>
+        </button>
+        <button
+          class="tabBtn px-4 py-2 bg-white hover:bg-indigo-700 hover:text-white rounded-lg w-full"
+          onclick="openTab(event, 'sales')"
+        >
+          <i class="fa-solid fa-tags"></i>
+          <span class="ml-2">Sales</span>
+        </button>
+      </div> -->
+    </div>
+  </div>
+
+  <section class="flex flex-col gap-4">
+    <div id="stats" class="tabcontent w-full flex flex-col gap-2"></div>
+
+    <div id="sales" class="tabcontent w-full flex flex-col gap-2"></div>
+  </section>
+</div>
+
+{% endblock %}

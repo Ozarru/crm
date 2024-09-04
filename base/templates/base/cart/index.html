@@ -1,0 +1,85 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col gap-4">
+  <div class="flex justify-between items-center gap-2 text-sm">
+    <div class="flex justify-between items-center gap-2">
+      <a
+        id="back-button"
+        class="px-3 py-2 text-white text-xs bg-sky-500 hover:bg-indigo-700 rounded-lg transition ease-in duration-200"
+        href="#"
+        >&larr;
+      </a>
+    </div>
+    <a
+      href="{% url 'clear_cart' %}"
+      class="px-3 py-2 text-white bg-red-600 hover:bg-red-800 rounded-lg transition ease-in duration-200"
+      >Empty the cart<i class="fa-solid fa-backspace ml-3"></i
+    ></a>
+  </div>
+
+  {% include 'base/cart/partial.html' %}
+</div>
+
+<!-- Include Select2 JS and CSS -->
+<link
+  href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+  // Function to initialize Select2
+  function initializeClientSelector() {
+    const clientSelect = $("select[name='client_id']");
+
+    // Initialize Select2 if not already initialized
+    if (!clientSelect.data("select2")) {
+      clientSelect.select2({
+        placeholder: "Select a client",
+        allowClear: true,
+      });
+    }
+  }
+
+  // Function to bind event for client selection and form submission
+  function bindClientSubmissionCheck() {
+    const checkoutBtn = document.getElementById("checkout_btn");
+
+    // Clean up any existing event listener to avoid duplicates
+    const oldListener = checkoutBtn.getAttribute("data-bound-listener");
+    if (oldListener) {
+      checkoutBtn.removeEventListener("click", window[oldListener]);
+    }
+
+    const onCheckoutClick = function (event) {
+      const clientSelect = document.querySelector("select[name='client_id']");
+      const selectedClient = clientSelect.value;
+
+      if (!selectedClient) {
+        alert("Please select a client before proceeding with the checkout.");
+        event.preventDefault(); // Prevent form submission
+      } else {
+        document.getElementById("client_selector").submit(); // Submit the form if a client is selected
+      }
+    };
+
+    // Add the new event listener
+    checkoutBtn.addEventListener("click", onCheckoutClick);
+
+    // Store the listener function name to allow cleanup later
+    checkoutBtn.setAttribute("data-bound-listener", "onCheckoutClick");
+  }
+
+  // Initialize the scripts on page load
+  function initializeScripts() {
+    initializeClientSelector();
+    bindClientSubmissionCheck();
+  }
+
+  // Call the initialization functions when the document is ready
+  $(document).ready(initializeScripts);
+
+  // Re-initialize on HTMX content load
+  document.addEventListener("htmx:afterSwap", initializeScripts);
+</script>
+
+{% endblock %}

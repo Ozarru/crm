@@ -1,0 +1,76 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col gap-4">
+  <div class="flex justify-between items-center gap-2 text-sm">
+    <div class="flex justify-between items-center gap-2">
+      <a
+        id="back-button"
+        class="px-3 py-2 text-white text-xs bg-sky-500 hover:bg-indigo-700 rounded-lg transition ease-in duration-200"
+        href="#"
+        >&larr;
+      </a>
+    </div>
+
+    <form
+      id="filter"
+      action=""
+      hx-post="{% url 'filter_sales' %}"
+      hx-target=".sales_table"
+      class="hidden lg:flex justify-between items-center gap-1 w-full max-w-[600px] rounded-xl bg-white border hover:border-indigo-500 p-1 text-sm"
+    >
+      {% include 'date_margins.html' %}
+
+      <select
+        hx-post="{% url 'filter_sales' %}"
+        hx-target=".sales_table"
+        hx-trigger="change"
+        name="client_id"
+        class="w-full flex px-3 py-2 rounded-lg border focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-sky-500 cursor-pointer"
+      >
+        <option value="" selected="true" disabled="disabled">Clients</option>
+        {% for obj in clients %}
+        <option value="{{ obj.id }}">{{ obj.full_name }}</option>
+        {% endfor %}
+      </select>
+      <select
+        hx-post="{% url 'filter_sales' %}"
+        hx-target=".sales_table"
+        hx-trigger="change"
+        name="user_id"
+        class="w-full flex px-3 py-2 rounded-lg border focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-sky-500 cursor-pointer"
+      >
+        <option value="" selected="true" disabled="disabled">Users</option>
+        {% for obj in users %}
+        <option value="{{ obj.id }}">{{ obj.full_name }}</option>
+        {% endfor %}
+      </select>
+      <button
+        type="submit"
+        class="px-3 py-2 rounded-lg text-sm text-gray-200 bg-sky-500 hover:bg-indigo-700 transition ease-in duration-200"
+      >
+        <i class="fa-solid fa-search"></i>
+      </button>
+      <button
+        type="submit"
+        class="px-3 py-2 rounded-lg text-sm text-black bg-yellow-200 hover:bg-yellow-400 transition ease-in duration-200"
+        hx-on:click="clearForm('filter')"
+        type="submit"
+      >
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+    </form>
+  </div>
+
+  <div
+    class="sales_table"
+    hx-get="{% url 'sales_table' %}"
+    hx-trigger="load, db_changed from:body"
+    hx-target="this"
+  >
+    <p
+      class="h-[400px] w-full flex justify-center items-center text-sky-500 p-4"
+    >
+      <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+    </p>
+  </div>
+</div>
+{% endblock %}

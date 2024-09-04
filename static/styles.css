@@ -1,0 +1,87 @@
+/* scrollbar---------------------------------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 0.5em;
+  /* height: 0.25em; */
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 0;
+  margin-block: 0;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #4338CA;
+  border-radius: 3px;
+  /* width: 0.3em; */
+  height: 20px;
+}
+
+.smoothen{
+transition-property: all;
+transition-duration: 200ms;
+transition-timing-function: cubic-bezier(0.4, 0, 0.3, 1);
+
+}
+
+/* ul and li ---------------------------------------------------------------------------------------------------- */
+ul {
+  list-style: none;
+}
+li {
+  text-decoration: none;
+  text-emphasis: none;
+}
+
+/* tables---------------------------------------------------------------------------------------------------- */
+
+table {
+    border-radius: 10px !important;
+}
+
+
+.db-table {
+  border-collapse: collapse;
+}
+
+.db-table tbody tr:nth-of-type(even) {
+  background-color: #f1f1f1;
+}
+
+.active {
+  background: white;
+  color: #4338CA;
+}
+
+/* tabs---------------------------------------------------------------------------------------------------- */
+
+.tabbar button.active {
+  background-color: #4338CA;
+  color: white;
+}
+
+.tabcontent,
+.minitabcontent {
+  height: inherit;
+  /* display: none; */
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* z-indexer---------------------------------------------------------------------------------------------------- */
+
+.underlay {
+  z-index: -1;
+}
+
+.overlay {
+  z-index: 100;
+}

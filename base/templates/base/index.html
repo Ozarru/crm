@@ -1,0 +1,178 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+
+<div class="grid gap-4">
+  <div
+    class="p-6 bg-sky-200 shadow-sm rounded-2xl flex flex-col md:flex-row gap-8 justify-between items-center"
+  >
+    <article class="w-5/7 max-w-[800px]">
+      <h1 class="text-black text-3xl lg:text-7xl font-bold">
+        Welcome to the CRM
+      </h1>
+      <p class="mt-4">
+        A Customer Relationship Management (CRM) system is a powerful tool
+        designed to help businesses manage and analyze customer interactions and
+        data throughout the customer lifecycle. The primary goal of a CRM is to
+        improve customer relationships, enhance customer satisfaction, and drive
+        sales growth.
+      </p>
+    </article>
+    <img
+      class="h-40 mx-auto xl:mx-0 xl:mr-2 rounded-2xl"
+      src="{% static 'imgs/crm_alt.png' %}"
+      alt="logo"
+    />
+  </div>
+
+  <section class="flex flex-col md:grid grid-cols-2 gap-4 lg:grid-cols-3">
+    <a
+      href="{% url 'home' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-indigo-700 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-home text-gray-400 group-hover:text-indigo-700 transition ease-in duration-200"
+        ></i>
+        <h3 class="font-bold text-black text-md">Home</h3>
+      </div>
+      <p>
+        The home page serves as the central hub of your web app, providing users
+        with an overview of the key features and functionalities available. It
+        often includes a dashboard with quick access to important metrics,
+        recent activities, notifications, and links to other sections of the
+        app.
+      </p>
+    </a>
+
+    <a
+      href="{% url 'categories' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-indigo-700 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-layer-group text-gray-400 group-hover:text-indigo-700 transition ease-in duration-200"
+        ></i>
+        <h3 class="font-bold text-black text-md">Categories</h3>
+      </div>
+      <p>
+        The categories section allows users to organize products into distinct
+        groups for easier navigation and management. Users can create, edit, and
+        delete categories, making it simple to classify products based on their
+        attributes.
+      </p>
+    </a>
+
+    <a
+      href="{% url 'products' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-indigo-700 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-boxes text-gray-400 group-hover:text-indigo-700 transition ease-in duration-200"
+        ></i>
+        <h3 class="font-bold text-black text-md">Products</h3>
+      </div>
+      <p>
+        The products section displays a comprehensive list of items available
+        for sale. Users can add new products, edit existing ones, or remove
+        products that are no longer available.
+      </p>
+    </a>
+
+    <a
+      href="{% url 'sale_point' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-indigo-700 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-cash-register text-gray-400 group-hover:text-indigo-700 transition ease-in duration-200"
+        ></i>
+
+        <h3 class="font-bold text-black text-md">Point of sale</h3>
+      </div>
+      <p>
+        The point of sale (POS) feature enables users to process transactions
+        and manage sales in real-time. This section usually includes a
+        user-friendly interface for selecting products, entering quantities,
+        applying discounts, and completing purchases.
+      </p>
+    </a>
+    <a
+      href="{% url 'sales' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-indigo-700 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-tags text-gray-400 group-hover:text-indigo-700 transition ease-in duration-200"
+        ></i>
+
+        <h3 class="font-bold text-black text-md">Sales</h3>
+      </div>
+      <p>
+        The sales section provides an overview of all completed transactions,
+        including details such as date, time, total amount, and customer
+        information. Users can filter, search, and analyze sales data to
+        identify trends, track performance, and generate reports.
+      </p>
+    </a>
+    <a
+      href="{% url 'invoicing' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-indigo-700 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-scroll text-gray-400 group-hover:text-indigo-700 transition ease-in duration-200"
+        ></i>
+        <h3 class="font-bold text-black text-md">Invoicing</h3>
+      </div>
+      <p>
+        The invoicing section allows users to create, manage, and send invoices
+        to clients. Users can generate invoices based on sales transactions,
+        customize invoice templates, and track payment statuses. This feature
+        helps streamline the billing process and maintain accurate financial
+        records.
+      </p>
+    </a>
+  </section>
+
+  <section class="flex flex-col md:grid grid-cols-2 gap-4">
+    <a
+      href="{% url 'clients' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-sky-500 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-users-rays text-gray-400 group-hover:text-sky-500 transition ease-in duration-200"
+        ></i>
+
+        <h3 class="font-bold text-black text-md">Clients</h3>
+      </div>
+      <p>
+        The clients section is dedicated to managing customer information. Users
+        can add new clients, update existing profiles, and view detailed
+        information such as contact details, purchase history, and outstanding
+        invoices. This section helps foster strong client relationships and
+        improve customer service.
+      </p>
+    </a>
+    <a
+      href="{% url 'users' %}"
+      class="p-6 w-full bg-white flex flex-col items-center gap-2 rounded-xl border hover:shadow-lg hover:border-sky-500 transition ease-in duration-200 group"
+    >
+      <div class="flex items-center gap-2 w-full">
+        <i
+          class="fa-solid fa-users text-gray-400 group-hover:text-sky-500 transition ease-in duration-200"
+        ></i>
+        <h3 class="font-bold text-black text-md">Users</h3>
+      </div>
+      <p>
+        The users section manages user accounts and permissions within the web
+        app. Admins can create new user profiles, assign roles (e.g., admin,
+        staff, sales), and set access levels to various features. This ensures
+        secure and organized management of the app while facilitating
+        collaboration among team members.
+      </p>
+    </a>
+  </section>
+</div>
+
+{% endblock %}

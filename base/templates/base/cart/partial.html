@@ -1,0 +1,63 @@
+<section id="cart" class="flex flex-col gap-4">
+  {% if cart_count == 0 %}
+  <div class="flex flex-col items-center gap-2 mt-40 mx-auto">
+    <i class="fa-solid fa-shopping-cart text-indigo-700 text-xl"></i>
+    <span>The cart is empty</span>
+    <a
+      href="{% url 'sale_point' %}"
+      class="py-3 px-4 bg-sky-500 hover:bg-indigo-700 text-white rounded-lg flex items-center gap-4 transition-all duration-200"
+      >Go to the point of sale <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </div>
+  {% else %}
+  <!-- client selector -->
+  <div class="w-fit flex items-center gap-3">
+    <button
+      onclick="hide_dialogs()"
+      hx-target="#basic_dialog"
+      hx-get="{% url 'create_client' %}"
+      class="w-40 px-4 py-2 flex items-center justify-between text-sm text-white bg-indigo-700 hover:bg-indigo-900 rounded-lg transition ease-in duration-200"
+    >
+      New client <i class="text-sm fa-solid fa-plus"></i>
+    </button>
+    <form
+      id="client_selector"
+      action="{% url 'checkout' %}"
+      method="post"
+      class="w-full grid gap-2 text-sm"
+    >
+      {% csrf_token %}
+      <select
+        name="client_id"
+        class="flex px-3 py-2 rounded-lg border focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-sky-500 w-fit cursor-pointer"
+      >
+        <option value="" selected="true" disabled="disabled">Client</option>
+        {% for obj in clients %}
+        <option value="{{obj.id}}">
+          {{obj.full_name}} (tel:{{obj.phone}})
+        </option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+
+  <!-- cart overview -->
+  <div
+    class="bg-white shadow-md border p-2 rounded-lg text-xs lg:rounded-xl lg:text-base grid grid-cols-2 lg:flex justify-between items-center gap-4"
+  >
+    <span>Items : {{ cart_items|length }}</span>
+    <span>Quantity : {{ cart_count }}</span>
+    <span>Total : {{ cart_total }} F/€</span>
+
+    <a
+      id="checkout_btn"
+      href="#"
+      class="py-2 px-4 bg-indigo-700 hover:bg-indigo-900 text-white rounded-lg flex items-center gap-4 transition-all duration-200"
+      >Checkout <i class="fa-solid fa-arrow-right"></i>
+    </a>
+  </div>
+  <!-- cart items -->
+  {% include 'base/cart/items.html' %}
+  <!--  -->
+  {% endif %}
+</section>

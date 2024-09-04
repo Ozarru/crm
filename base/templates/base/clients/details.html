@@ -1,0 +1,121 @@
+{% extends 'main.html' %} {% load static %} {% block content %}
+<div class="w-full max-w-7xl mx-auto flex flex-col justify-between gap-4">
+  <div class="flex justify-between items-center gap-4">
+    <a
+      id="back-button"
+      class="px-3 py-2 text-white text-xs bg-sky-500 hover:bg-indigo-700 rounded-lg transition ease-in duration-200"
+      href="#"
+      >&larr;
+    </a>
+  </div>
+  <!--  -->
+  <div
+    class="p-3 w-full h-full border border-indigo-700 rounded-xl shadow-lg flex flex-col lg:flex-row items-center gap-4"
+  >
+    {% if not curr_obj.image %}
+    <img
+      class="h-40 w-40 bg-white rounded-full object-cover"
+      src="{% static 'imgs/anon.png' %}"
+      alt="image"
+    />
+    {% else %}
+    <img
+      class="h-40 w-40 bg-white rounded-full object-cover"
+      src="{{curr_obj.image.url}}"
+      alt="image"
+    />
+    {% endif %}
+    <article class="text-gray-700 grid gap-1 w-full">
+      <div class="flex justify-between items-center">
+        <h4 class="text-black text-2xl font-bold">{{curr_obj.full_name}}</h4>
+        <button
+          hx-target="#basic_dialog"
+          hx-get="{% url 'edit_user' curr_obj.id %}"
+          class="bg-indigo-700 hover:bg-indigo-900 rounded-lg py-2 px-4 text-white flex items-center gap-2"
+        >
+          <i class="fa-solid fa-pen text-xs"></i>
+        </button>
+      </div>
+      <p>
+        <i class="fa-solid fa-venus-mars mr-3"></i> Sex :
+        <span class="text-black"> {{curr_obj.sex|title}} </span>
+      </p>
+      <p>
+        <i class="fa-solid fa-phone mr-3"></i> Phone :
+        <span class="text-black"> {{curr_obj.phone}} </span>
+      </p>
+      <p>
+        <i class="fa-solid fa-location-dot mr-3"></i> Address :
+        <span class="text-black"> {{curr_obj.address}} </span>
+      </p>
+    </article>
+    <!--  -->
+    <div
+      class="w-full h-100 bg-sky-500 text-white p-4 rounded-lg flex flex-col gap-2"
+    >
+      <p>
+        <i class="fa-solid fa-tags text-indigo-700 mr-3"></i>Purchases made :
+        <span class="font-bold"> {{sales|length}} </span>
+      </p>
+      <p>
+        <i class="fa-solid fa-circle-dollar-to-slot text-indigo-700 mr-3"></i
+        >Purchases value :
+        <span class="font-bold"> {{sales_aggregate}} € </span>
+      </p>
+
+      <!-- filter form -->
+      <form
+        id="filter"
+        hx-post="{% url 'filter_sales' curr_obj.id %}"
+        hx-target=".client_sales"
+        class="p-1 w-full max-w-3xl flex justify-between items-center gap-1 text-black text-sm"
+      >
+        {% include 'date_margins.html' %}
+
+        <section class="w-full flex justify-between items-center gap-1 text-xs">
+          <!-- user -->
+          <select
+            name="user"
+            class="hidden sm:flex px-3 py-2 rounded-lg border focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-sky-400 w-full cursor-pointer"
+          >
+            <option value="" selected="true" disabled="disabled">User</option>
+            {% for obj in users %}
+            <option value="{{obj.id}}">{{obj.full_name}}</option>
+            {% endfor %}
+          </select>
+        </section>
+
+        <button
+          class="px-3 py-2 bg-indigo-700 hover:bg-sky-500 text-white rounded-md transition duration-200 ease-in"
+          type="submit"
+        >
+          <i class="fa-solid fa-filter"></i>
+        </button>
+        <button
+          class="px-3 py-2 bg-yellow-200 hover:bg-yellow-400 text-black rounded-md transition duration-200 ease-in"
+          hx-on:click="clearForm('filter')"
+          type="submit"
+        >
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <section class="mb-20 flex flex-col gap-2">
+    <h3 class="font-bold text-lg text-black">Client sales</h3>
+    <div
+      class="client_sales h-full w-full"
+      hx-get="{% url 'client_sales' curr_obj.id %}"
+      hx-trigger="load, db_changed from:body"
+      hx-target="this"
+    >
+      <p
+        class="h-full w-full flex justify-center items-center text-sky-500 p-4"
+      >
+        <i class="m-auto fas fa-spinner fa-spin text-3xl animate-spin"></i>
+      </p>
+    </div>
+  </section>
+</div>
+{% endblock %}

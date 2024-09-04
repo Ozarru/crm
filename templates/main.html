@@ -1,0 +1,190 @@
+{% load static %} {% load cache %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.8"
+      integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/f601cf3e61.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'main.js' %}" defer="true"></script>
+    <script src="{% static 'cart.js' %}" defer="true"></script>
+    <link href="{% static 'styles.css' %}" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Lato"
+    />
+    <link
+      rel="shortcut icon"
+      href="{% static 'imgs/logo.png' %}"
+      type="image/x-icon"
+    />
+
+    <style>
+      body {
+        font-family: "Lato", sans-serif;
+      }
+    </style>
+    <title>CRM-{{title}}</title>
+  </head>
+  <body
+    hx-boost="true"
+    hx-headers='{"X-CSRFToken" : "{{ csrf_token }}"}'
+    class="flex flex-row bg-gray-100 text-gray-700 max-w-full mx-auto"
+  >
+    {% include 'sidebar.html' %}
+
+    <div
+      class="w-full ml-[60px] md:ml-[80px] xl:ml-[300px] min-h-screen overflow-auto"
+    >
+      <!--  -->
+      {% include 'snackbar.html' %}
+      <!--  -->
+      <div
+        class="relative p-4 mb-40 w-full max-w-[1350px] mx-auto min-h-screen"
+      >
+        <!-- main content area -->
+        <section id="base">{% block content %} {% endblock %}</section>
+      </div>
+    </div>
+    <!--  -->
+    {% include 'modal.html' %}
+    <!-- csrf_token for AJAX and HTMX requests!!! Very important -->
+    <input
+      type="hidden"
+      id="csrf_token"
+      name="csrfmiddlewaretoken"
+      value="{{ csrf_token }}"
+    />
+  </body>
+
+  <script>
+    htmx.onLoad(function (content) {
+      scripts.init(content);
+    });
+
+    //  modal forecloser and redirector ----------------------------------------------------------------------------------------------------
+    function closeModalAndRedirect() {
+      // Close the modal (assuming your modal has an ID of #basic_dialog)
+      document.querySelector("#basic_dialog").style.display = "none";
+
+      // Redirect to the previous page
+      window.location.href = document.referrer;
+    }
+
+    //  modal forecloser and reloader ----------------------------------------------------------------------------------------------------
+    function closeModalAndReload() {
+      // Close the modal (assuming your modal has an ID of #basic_dialog)
+      document.querySelector("#basic_dialog").style.display = "none";
+
+      // Reload the current page
+      location.reload();
+    }
+
+    //  dropdown manager ----------------------------------------------------------------------------------------------------
+    function toggleMenu(e, obj_id) {
+      activeMenu = document.getElementById(obj_id);
+      e.name === `actions`
+        ? ((e.name = "close"), activeMenu.classList.remove("hidden"))
+        : ((e.name = `actions`), activeMenu.classList.add("hidden"));
+    }
+
+    window.addEventListener("mouseup", function (event) {
+      activeMenu.classList.add("hidden");
+    });
+
+    //  form resetter ----------------------------------------------------------------------------------------------------
+    function clearForm(div_id) {
+      // alert('cleared')
+      var form = document.getElementById(div_id);
+      form.reset();
+    }
+
+    //  go back one page ----------------------------------------------------------------------------------------------------
+    backBtn = document.getElementById("back-button");
+    backBtn.addEventListener("click", function (event) {
+      event.preventDefault(); // Prevent the default anchor behavior
+      window.history.go(-1); // Go back two pages
+    });
+
+    function goBack() {
+      window.history.back();
+    }
+
+    // add to cart button ----------------------------------------------------------------------------------------------------
+    function add_to_cart(obj_id) {
+      // alert('added')
+      // Retrieve the CSRF token from the hidden input
+      const csrfToken = document.getElementById("csrf_token").value;
+      $.ajax({
+        type: "POST",
+        url: "{% url 'add_to_cart' %}",
+        data: {
+          product_id: obj_id,
+          csrfmiddlewaretoken: csrfToken,
+          action: "post",
+        },
+        success: function (json) {
+          let counter_span = document.getElementById("cart_counter");
+          counter_span.textContent = json.cart_count;
+
+          // Convert cart_count to an integer and check the condition
+          if (parseInt(json.cart_count) > 0) {
+            counter_span.classList.remove("bg-gray-200");
+            counter_span.classList.add("bg-yellow-400");
+          } else {
+            counter_span.classList.remove("bg-yellow-400");
+            counter_span.classList.add("bg-gray-200");
+          }
+        },
+        error: function (xhr, errmsg, err) {
+          console.error(errmsg); // Log error message to console
+        },
+      });
+    }
+
+    //  tabbar navigator ----------------------------------------------------------------------------------------------------
+    document.getElementById("defaultTab").click();
+    function openTab(event, tabName) {
+      var i, tabcontent, tabBtn;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tabBtn = document.getElementsByClassName("tabBtn");
+      for (i = 0; i < tabBtn.length; i++) {
+        tabBtn[i].className = tabBtn[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      event.currentTarget.className += " active";
+    }
+
+    // PDF exporter --------------------------------------------------------
+    function exportPDF(div_id) {
+      var element = document.getElementById(div_id);
+      var opt = {
+        margin: 0.5,
+        filename: `${div_id}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: {
+          unit: "in",
+          // format: [80 / 25.4, 297 / 25.4],
+          // orientation: "portrait",
+          orientation: "landscape",
+        },
+      };
+      html2pdf().from(element).set(opt).save();
+    }
+  </script>
+</html>
